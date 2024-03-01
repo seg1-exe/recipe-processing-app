@@ -5,10 +5,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import java.util.Arrays;
-import java.util.List;
 
 public class ResultWindow extends Stage {
     public ResultWindow(String results) {

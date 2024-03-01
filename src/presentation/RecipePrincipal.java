@@ -33,7 +33,7 @@ public class RecipePrincipal extends Application {
 
         // Création du menu
         MenuBar menuBar = new MenuBar();
-        Menu menu = new Menu("Présentation");
+        Menu menu = new Menu("Mode de présentation");
         MenuItem textMenuItem = new MenuItem("Textuel");
         MenuItem graphMenuItem = new MenuItem("Graphique");
 
@@ -119,7 +119,7 @@ public class RecipePrincipal extends Application {
                 initRecipeRepo();
                 result.append("Liste des recettes : \n");
                 List<String> recipeTitles = recipeRepo.listRecipeTitles();
-                recipeTitles.forEach(title -> result.append(title).append("\n"));
+                recipeTitles.forEach(title -> result.append("- ").append(title).append("\n"));
                 break;
             case "Nombre total d'oeufs":
                 initRecipeRepo();
@@ -128,19 +128,19 @@ public class RecipePrincipal extends Application {
             case "Recettes utilisant de l'huile d'olive":
                 initRecipeRepo();
                 result.append("Recettes utilisant de l'huile d'olive : \n");
-                recipeRepo.listRecipesUsingOliveOil().forEach(recipe -> result.append(recipe).append("\n"));
+                recipeRepo.listRecipesUsingOliveOil().forEach(recipe -> result.append("- ").append(recipe).append("\n"));
                 break;
             case "Nombre d'oeufs par recette":
                 initRecipeRepo();
                 result.append("Nombre d'oeufs par recette : \n");
                 recipeRepo.countEggsPerRecipe().forEach((recipe, eggcount) -> {
-                    result.append(recipe).append(" : ").append(eggcount).append(" oeuf(s)\n");
+                    result.append("- ").append(recipe).append(" : ").append(eggcount).append(" oeuf(s)\n");
                 });
                 break;
             case "Recette fournissant moins de 500 calories":
                 initRecipeRepo();
                 result.append("Recette fournissant moins de 500 calories : \n");
-                recipeRepo.listRecipesWithLessThan500Calories().forEach(recipe -> result.append(recipe).append("\n"));
+                recipeRepo.listRecipesWithLessThan500Calories().forEach(recipe -> result.append("- ").append(recipe).append("\n"));
                 break;
             case "Quantité de sucre utilisée par la recette Zuppa Inglese":
                 initRecipeRepo();
@@ -154,17 +154,17 @@ public class RecipePrincipal extends Application {
             case "Recettes avec plus de 5 étapes":
                 initRecipeRepo();
                 result.append("Recettes avec plus de 5 étapes : \n");
-                recipeRepo.listRecipesWithMoreThanFiveSteps().forEach(recipe -> result.append(recipe).append("\n"));
+                recipeRepo.listRecipesWithMoreThanFiveSteps().forEach(recipe -> result.append("- ").append(recipe).append("\n"));
                 break;
             case "Recettes ne contenant pas de beurre":
                 initRecipeRepo();
                 result.append("Recettes ne contenant pas de beurre : \n");
-                recipeRepo.listRecipesWithoutButter().forEach(recipe -> result.append(recipe).append("\n"));
+                recipeRepo.listRecipesWithoutButter().forEach(recipe -> result.append("- ").append(recipe).append("\n"));
                 break;
             case "Recettes ayant des ingrédients en commun avec la recette Zuppa Inglese":
                 initRecipeRepo();
                 result.append("Recettes ayant des ingrédients en commun avec la recette Zuppa Inglese : \n");
-                recipeRepo.listRecipesWithSharedIngredients().forEach(recipe -> result.append(recipe).append("\n"));
+                recipeRepo.listRecipesWithSharedIngredients().forEach(recipe -> result.append("- ").append(recipe).append("\n"));
                 break;
             case "Recette la plus calorique":
                 initRecipeRepo();
@@ -178,7 +178,7 @@ public class RecipePrincipal extends Application {
                 initRecipeRepo();
                 result.append("Nombre d'ingrédients par recette : \n");
                 recipeRepo.numberOfIngredientPerRecipe().forEach((recipe, ingredientCount) -> {
-                    result.append(recipe).append(" : ").append(ingredientCount).append(" ingrédient(s)\n");
+                    result.append("- ").append(recipe).append(" : ").append(ingredientCount).append(" ingrédient(s)\n");
                 });
                 break;
             case "Recette la plus grasse":
@@ -192,13 +192,13 @@ public class RecipePrincipal extends Application {
             case "Recettes triées par nombre d'ingrédients":
                 initRecipeRepo();
                 result.append("Recettes triées par nombre d'ingrédients : \n");
-                recipeRepo.sortByIngredientsNumber().forEach(recipe -> result.append(recipe).append("\n"));
+                recipeRepo.sortByIngredientsNumber().forEach(recipe -> result.append("- ").append(recipe).append("\n"));
                 break;
             case "Pour chaque ingrédient, les recettes qui l'utilisent":
                 initRecipeRepo();
                 result.append("Pour chaque ingrédient, les recettes qui l'utilisent : \n");
                 recipeRepo.displayRecipesByIngredient().forEach((ingredient, recipes) -> {
-                    result.append(ingredient).append(" : ").append(recipes).append("\n");
+                    result.append("- ").append(ingredient).append(" : ").append(recipes).append("\n");
                 });
                 break;
             case "Répartition des recettes par étape de réalisation":
