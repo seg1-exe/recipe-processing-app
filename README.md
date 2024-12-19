@@ -1,136 +1,121 @@
 <center>
 
-# Programmation Fonctionnelle
+# Projet de programmation fonctionnelle
 **Gillier Arthur**
-
-## Gestion de recettes
 </center>
 
+## Résumé
+
+Ce projet a pour objet la manipulation et l’analyse d’un ensemble de recettes de cuisine au format XML, en s’appuyant sur une approche de programmation fonctionnelle en Java. En recourant aux flux (Streams) de l’API Java, le projet met en œuvre les opérations classiques de filtrage, de transformation et d’agrégation des données (pattern Map/Filter/Reduce). Les résultats sont accessibles via deux interfaces – textuelle (via le terminale de commande) et graphique (en utilisant JavaFX) – permettant d’explorer facilement les recettes, leurs ingrédients, leurs valeurs nutritionnelles, ainsi que divers attributs qualitatifs (commentaires, étapes, etc.).
+
+Au-delà de la simple consultation, l’application permet des analyses plus avancées (calcul du nombre total d’œufs utilisés, identification des recettes les plus légères en calories, détermination de l’ingrédient le plus fréquent, etc.), démontrant ainsi la pertinence de la programmation fonctionnelle pour traiter efficacement des données semi-structurées.
 
 
-## Description 
+## Introduction 
 
-Ce projet est un projet de programmation fonctionnelle proposé par l'Université de La Rochelle. Son objectif est de mettre en pratique divers concepts clés de ce paradigme, tels que les fonctions lambda, les interfaces fonctionnelles, les streams, et les collections.
+Dans un contexte où les données culinaires sont de plus en plus disponibles sous format numérique, l’objectif de ce projet est de développer une application Java centrée sur le paradigme fonctionnel, afin de traiter un corpus de recettes issues d’un fichier XML. Ce travail s’inscrit dans le cadre pédagogique de l’Université de La Rochelle, visant à consolider les compétences en programmation fonctionnelle, en manipulation d’API Stream, et en conception orientée-objet.
 
-Le projet propose deux interfaces distinctes pour visualiser les données :
-
-**Interface Textuelle**: Offre une représentation textuelle des données, facilitant leur analyse et leur compréhension.
-
-**Interface Graphique**: Exploite des éléments visuels pour présenter les données de manière intuitive et interactive.
-En implémentant ces deux interfaces, le projet vise à explorer les différentes options offertes par la programmation fonctionnelle pour la manipulation et la visualisation des données.
+La principale originalité de cette application réside dans son utilisation intensive des opérations fonctionnelles disponibles en Java (map, filter, reduce, collect), dans le but d’extraire des connaissances pertinentes à partir d’un ensemble hétérogène de données culinaires.
 
 
-## Objectif
+## Contexte et Objectifs
 
-Développement d'une application Java pour la gestion et l'exploration d'un ensemble de recettes de cuisine stockées au format XML.
+Les objectifs pédagogiques et techniques sont multiples :
 
-L'application s'appuie sur les principes de la programmation fonctionnelle et exploite l'API Stream de Java pour :
+- Compréhension du paradigme fonctionnel en Java : Mise en pratique des lambdas, interfaces fonctionnelles et streams.
+- Extraction et structuration des données : Lecture d’un fichier XML, parsing et initialisation d’une collection interne de recettes.
+- Traitements avancés sur les données : Calcul de statistiques (nombre total d’œufs, quantités calorifiques), filtrages personnalisés (recettes à moins de 500 calories, sans beurre, etc.), et agrégations (ingrédient le plus utilisé, répartition par étapes).
+- Double interface de présentation : Une interface textuelle pour un accès rapide aux résultats, et une interface graphique (JavaFX ou Swing) pour une visualisation plus intuitive.
 
-- Analyser et traiter les données contenues dans les fichiers XML.
-- Filtrer et rechercher des recettes spécifiques en fonction de divers critères.
+## Architecture du système
 
-## Présentation
+Le code est organisé en plusieurs packages, reflétant une approche modulaire :
 
-### Interface graphique :
+1. `models` : Contient les classes qui modélisent les entités du domaine, notamment :
+    - **Recipe** : Représente une recette avec son titre, sa date, ses ingrédients, ses informations nutritionnelles, un commentaire et un lien vers d’autres recettes (related).
+    - **Ingredient** : Représente un ingrédient, associé à un nom, une quantité, une unité et une liste éventuelle d’ingrédients composés. Cette classe stocke également les étapes de préparation qui s’y rattachent.
+    - **Nutrition** : Encapsule les informations nutritionnelles d’une recette (protéines, glucides, lipides, calories).
+    - **Related** : Permet d’établir des liens entre différentes recettes.
 
-![Fenêtre principale avec le choix de mode de présentation](/img/menuBase.png)
+2. `repositories` : Contient la classe `RecipeRepo` chargée de la gestion des données. Elle assure notamment :
+    - Le chargement du fichier XML (`recipes.xml`) et la création des objets Recipe.
+    - La mise à disposition de méthodes d’accès et de traitement sémantiquement riches (listage des titres, calculs d’ingrédients, filtrage par contraintes diverses).
 
-![Affichage d'une méthode](/img/interfaceGraphique.png)
+3. `presentation` : Classes liées à l’affichage et à l’interaction avec l’utilisateur.
 
-### Interface textuelle :
+    - **RecipePrincipal** : Point d’entrée de l’application, gestion du choix entre interface textuelle et graphique, chargement du référentiel, interaction avec l’utilisateur.
+    - **ResultWindow** (exemple) : Présentation graphique des résultats.
 
-![Pop-up d'information](/img/interfaceText.png)
+Cette architecture sépare nettement la logique métier (extraction et traitement des données) de la présentation, favorisant la maintenabilité et l’extensibilité de l’application.
 
-![Affichage des méthodes dans le terminal](/img/terminal.png)
+## Modélisation des entités
 
-<br>
+### Classe `Recipe`
 
-## Entités
+Une `Recipe` est définie par un identifiant unique, un titre, une date, une liste d’ingrédients (`List<Ingredient>`), des informations nutritionnelles (`Nutrition`), un commentaire facultatif et une référence à d’autres recettes (via `Related`).
 
-## Package Models
+Extrait caractéristique :
 
-### Recipe 
+- `List<Ingredient> ingredients` : Liste des ingrédients principaux de la recette.
+- `Nutrition nutrition` : Informations protéiques, glucidiques, lipidiques et caloriques.
+- Méthodes setter/getter pour manipuler ces attributs.
 
-La classe Recipe représente une recette de cuisine. Elle contient les attributs suivants :
-- id : Un identifiant unique de la recette.
-- title : Un nom la représentant.
-- date : La date de création de la recette.
-- ingredients : Une liste d'ingrédients.
-- nutrition : Les informations nutritionnelles de la recette.
-- comment : Le ou les commentaire(s) de la recette.
-- related : Donne les recettes allant bien ensemble
+### Classe `Ingredient` 
 
-### Ingredient 
+`Ingredient` encapsule un nom, une quantité, une unité de mesure, une liste éventuelle d’ingrédients imbriqués (pour les compositions complexes), ainsi qu’une liste d’étapes de préparation.
 
-La classe Ingrédient encapsule les informations relatives à un ingrédient unique. Elle contient les attributs suivants :
-- name: Le nom de l'ingrédient.
-- amount: La quantité nécessaire de l'ingrédient, pouvant être un nombre entier ou décimal.
-- unit: L'unité de mesure de la quantité.
-- ingredients: Une liste imbriquée d'objets Ingredient pour les cas où un ingrédient est composé d'autres ingrédients.
-- steps: Une liste d'instructions pour la préparation de l'ingrédient.
+Extrait caractéristique :
 
-### Related 
+- `List<String> steps` : Les étapes de préparation associées à l’ingrédient, permettant d’associer non seulement une quantité, mais aussi un mode opératoire spécifique à cet ingrédient.
 
-La classe Related tisse des liens entre les recettes de notre application. Elle contient les attributs suivants :
-- ref : Une référence à une autre recette.
-- comment : Un texte facultatif offrant un commentaire.
+Ce niveau de granularité permet une modélisation fine des recettes, qui peuvent inclure des ingrédients composés ou plusieurs couches d’ingrédients.
 
-### Nutrition 
+### Classes `Nutrition` & `Related`
 
-La classe Nutrition joue un rôle clé dans la gestion des informations nutritionnelles au sein de l'application de recettes. Elle contient les attributs suivants :
-- protein: Quantité de protéines contenue dans la recette.
-- carbohydrates: Quantité de glucides présents dans la recette.
-- fat: Quantité de lipides contenue dans la recette.
-- calories: Nombre total de calories apportées par la recette.
+- `Nutrition` : Décrit la valeur nutritionnelle d’une recette (calories, protéines, etc.).
+- `Related` : Lie une recette à une autre, permettant par exemple d’établir des suggestions de recettes complémentaires.
 
+## Interface utilisateur
 
-## Package Repositories
+### Interface textuelle
 
-### RecipeRepo 
+L’interface textuelle permet une interaction simple, directement dans la console. L’utilisateur peut sélectionner une opération (par ex. afficher les titres, calculer le nombre total d’œufs) et observer le résultat immédiatement.
 
-La classe RecipeRepo joue un rôle central dans l'application de gestion de recettes. Elle est responsable du chargement des recettes depuis un fichier XML, de leur stockage en mémoire et de la mise à disposition de diverses méthodes pour manipuler et exploiter les données culinaires.
+### Interface graphique
 
-## Package Presentation
+L’interface graphique offre une fenêtre principale avec des options de navigation, la possibilité d’afficher les résultats dans une fenêtre dédiée et, le cas échéant, de proposer une interaction plus conviviale (boutons, menus déroulants, etc.).
 
-### RecipePrincipal 
+## Analyse et résultats
 
-La classe RecipePrincipal est le point d'entrée principal de l'application de gestion de recettes. Elle s'occupe de:
+Grâce aux traitements implémentés, l’application met en lumière diverses informations utiles :
 
-- L'initialisation de l'interface utilisateur: Crée la fenêtre principale, les menus et les boutons.
-- Le chargement des données des recettes: Utilise la classe RecipeRepo pour charger les recettes depuis un fichier XML.
-- L'affichage des résultats: Gère l'affichage des résultats des analyses et des calculs effectués sur les données des recettes.
-- La gestion des interactions utilisateur: Détecte les clics sur les boutons et déclenche les actions correspondantes.
+- Statistiques globales : Nombre total d’œufs, recette la plus calorique, répartition des recettes par étapes, etc.
+- Filtrages sémantiques : Recettes sans beurre, recettes avec de l’huile d’olive, ou ne dépassant pas un certain seuil calorique.
+- Points précis : Les deux premières étapes de la recette « Zuppa Inglese », l’unité de mesure la plus fréquente, l’ingrédient le plus utilisé, etc.
 
-### ResultWindow
+Ces résultats illustrent la flexibilité offerte par l’API Stream, permettant une manipulation déclarative des données, plus concise et plus claire que des boucles et conditions impératives traditionnelles.
 
-La classe ResultWindow sert à afficher les résultats des analyses effectuées sur les recettes au sein d'une fenêtre distincte. Elle prend en charge la création et la configuration de cette fenêtre.
+## Difficultés rencontrées et limitations
 
-## Auteur
-- **seg1** - *Initial work* - [seg1](https://github.com/seg1-exe)
+- **Parsing XML** : Le traitement du fichier a nécessité une prise en main de l’API DOM. Bien que fonctionnelle, elle est parfois verbeuse. L’usage d’autres solutions (StAX, JAXB) pourrait simplifier le code.
+- **Données incomplètes ou hétérogènes** : Certaines recettes peuvent omettre certaines unités, ou n’avoir que des quantités textuelles (« * »). Le code gère ces cas, mais au prix d’un certain nombre de vérifications.
+- **Découverte de JavaFX** : L’interface graphique a été réalisée avec JavaFX, un framework graphique que je découvrais pour la première fois. Sans formation préalable, l’apprentissage s’est fait directement au cours du projet, rallongeant le temps de développement et l’effort de recherche. Cette expérience a toutefois permis d’acquérir une nouvelle compétence technique, mais a également augmenté la courbe d’apprentissage et la complexité des tâches d’implémentation.
+- **Évolutivité** : L’ajout de nouveaux critères de filtrage ou de nouvelles méthodes analytiques est aisé grâce à l’approche fonctionnelle, mais l’évolutivité dépend également de la structure des données en entrée.
 
-## Crédits
+## Perspectives 
 
+- **Amélioration du parsing** : Utiliser une bibliothèque plus haut niveau (JAXB) pour réduire la complexité du code d’initialisation.
+- **Indexation et performances** : Sur un jeu de données plus volumineux, introduire des structures de données plus efficaces, ou un système de cache pour accélérer certains calculs récurrents.
+- **Expérience utilisateur** : Améliorer l’interface graphique, offrir des filtres dynamiques, intégrer des graphiques (histogrammes, camemberts) pour visualiser la répartition des ingrédients, des unités ou des calories.
+
+## Conclusion
+
+Ce projet démontre l’efficacité du paradigme fonctionnel pour la manipulation de données semi-structurées en Java. L’usage des Streams, associé à une architecture modulaire clairement définie (distinction entre modèle, dépôt de données et présentation), permet une implémentation élégante et maintenable.
+
+L’application produite peut aisément être étendue à d’autres types de données culinaires ou alimentaires, et sert d’exemple pratique pour la mise en œuvre des concepts de programmation fonctionnelle, de normalisation des données, et de manipulation des collections en Java.
+
+## Remerciements
+
+- Merci aux enseignants de l’Université de La Rochelle pour l’encadrement et le soutien dans la réalisation de ce projet.
 - Inspiration pour la création du parser : [Article de Jérôme Frossard](https://www.epai-ict.ch/ict-modules/activities/m100-a7)
 - Mise en place de JavaFX : [Tutoriel vidéo de EL AZHARI KHADIJA](https://www.youtube.com/watch?v=9Fy7f1K7Yec) et [Article Stack Overflow](https://stackoverflow.com/questions/53795661/javafx-modular-application-java-lang-module-findexception-module-javafx-contro)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
